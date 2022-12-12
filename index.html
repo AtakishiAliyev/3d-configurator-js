@@ -18,12 +18,12 @@
     ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.js"></script>
-    <script src="index.js" defer></script>
-    <title>TR-170</title>
+    <script src="app.js" type="module" defer></script>
+    <title>Model Viewer</title>
   </head>
   <body>
     <model-viewer
-      src="./model/model.glb"
+      src="model/model.glb"
       shadow-intensity="0"
       ar
       ar-modes="webxr scene-viewer quick-look"
@@ -37,34 +37,19 @@
       quick-look-browsers="safari chrome"
     >
       <button
-        style="height: 80px"
+        class="mobile-ar-btn"
         slot="ar-button"
         id="ar-button"
         quick-look-browsers="safari chrome"
       >
         View in your space
       </button>
-      <a id="button2" data-fancybox="gallery" class="btnnn" href="210.png">
-        View in your space
-      </a>
-      <div id="ar-prompt">
-        <img src="./images/hand.png" />
-      </div>
-      <button id="ar-failure">AR is not tracking!</button>
-      <label for="selectid">Roof</label>
-      <!-- <select id="selectid" name="selectname">
-        <option value="wood" id="valid1">Wood</option>
-        <option value="shingles" id="valid2">Black shingles</option>
-        <option value="foil" id="valid2">Black foil</option>
-        <option value="straws" id="valid2">Straws</option>
-      </select>
-      <label for="selectid1">Back</label>
-      <select id="selectid1" name="selectname1">
-        <option value="glass" id="valid2">Glass</option>
-        <option value="wood2" id="valid1">Wood</option>
-      </select> -->
 
-      <select name="material-name" id="materialName"></select>
+      <div id="ar-prompt">
+        <img src="images/hand.png" />
+      </div>
+
+      <div class="model-filter-wrapper"></div>
     </model-viewer>
   </body>
 </html>
