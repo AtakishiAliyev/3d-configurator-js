@@ -69,6 +69,14 @@ model-viewer > #ar-prompt > img {
   gap: 8px;
 }
 
+.hotspot {
+  width: 20px;
+  height: 20px;
+  background-color: #4285f4;
+  border-radius: 50%;
+  border: none;
+}
+
 @keyframes circle {
   from {
     transform: translateX(-50%) rotate(0deg) translateX(50px) rotate(0deg);

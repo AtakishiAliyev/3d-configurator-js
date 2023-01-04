@@ -66,15 +66,29 @@ modelViewerTexture.addEventListener("load", (event) => {
         };
     })
 });
-/*
 
-const modelViewer = document.querySelector('model-viewer');
-    modelViewer.addEventListener('click', function(event) {
+// ! Annotations
+
+modelViewerTexture.addEventListener('click', function (event) {
+    const hotspotCounter = Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
     const x = event.clientX;
     const y = event.clientY;
 
-    const dataPosition = modelViewer.positionAndNormalFromPoint(x, y);
-    console.log(dataPosition);
-});
+    const dataPosition = modelViewerTexture.positionAndNormalFromPoint(x, y);
 
-*/
+    if (dataPosition == null) {
+        console.log('no result');
+        return;
+    }
+
+    const { position, normal } = dataPosition;
+
+    modelViewerTexture.innerHTML += `<button 
+                                        class="hotspot" 
+                                        slot="hotspot-${hotspotCounter}"
+                                        data-position="${position?.x + ' ' + position?.y + ' ' + position?.z}" 
+                                        data-normal="${normal?.x + ' ' + normal?.y + ' ' + normal?.z}"
+                                    ></button>`
+});
