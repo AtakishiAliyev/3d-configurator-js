@@ -66,3 +66,15 @@ modelViewerTexture.addEventListener("load", (event) => {
         };
     })
 });
+/*
+
+const modelViewer = document.querySelector('model-viewer');
+    modelViewer.addEventListener('click', function(event) {
+    const x = event.clientX;
+    const y = event.clientY;
+
+    const dataPosition = modelViewer.positionAndNormalFromPoint(x, y);
+    console.log(dataPosition);
+});
+
+*/
