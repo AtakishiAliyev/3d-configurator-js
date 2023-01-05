@@ -1,9 +1,25 @@
 import { dynamicMaterials, materialGroup } from './data.js';
 
-const modelViewerTexture = document.querySelector("model-viewer");
+const modelViewer = document.querySelector("model-viewer");
 customElements.get("model-viewer").minimumRenderScale = 1;
+const checkbox = modelViewer.querySelector('#show-dimensions');
 
-modelViewerTexture.addEventListener("load", (event) => {
+function setVisibility(element) {
+    if (checkbox.checked) {
+        element.classList.remove('hide');
+    } else {
+        element.classList.add('hide');
+    }
+}
+
+checkbox.addEventListener('change', () => {
+    setVisibility(modelViewer.querySelector('#lines'));
+    modelViewer.querySelectorAll('button').forEach((hotspot) => {
+        setVisibility(hotspot);
+    });
+});
+
+modelViewer.addEventListener("load", (event) => {
     const createOption = (name) => {
         const options = materialGroup.map(element => {
             if (element.category === name) {
@@ -29,10 +45,10 @@ modelViewerTexture.addEventListener("load", (event) => {
     const openMaterial = (arr, type) => {
         arr.forEach((el) => {
             const material =
-                modelViewerTexture.model.materials[el].pbrMetallicRoughness
+                modelViewer.model.materials[el].pbrMetallicRoughness
                     .baseColorFactor;
             material[3] = type ? 1 : 0;
-            modelViewerTexture.model.materials[
+            modelViewer.model.materials[
                 el
             ].pbrMetallicRoughness.setBaseColorFactor(material);
         });
@@ -65,30 +81,8 @@ modelViewerTexture.addEventListener("load", (event) => {
             roofChanger(select.name);
         };
     })
-});
 
-// ! Dimensions
-
-const modelViewer = document.querySelector("model-viewer");
-
-const checkbox = modelViewer.querySelector('#show-dimensions');
-
-function setVisibility(element) {
-    if (checkbox.checked) {
-        element.classList.remove('hide');
-    } else {
-        element.classList.add('hide');
-    }
-}
-
-checkbox.addEventListener('change', () => {
-    setVisibility(modelViewer.querySelector('#lines'));
-    modelViewer.querySelectorAll('button').forEach((hotspot) => {
-        setVisibility(hotspot);
-    });
-});
-
-modelViewer.addEventListener('load', () => {
+    // ! Dimensions
     const center = modelViewer.getBoundingBoxCenter();
     const size = modelViewer.getDimensions();
     const x2 = size.x / 2;
@@ -196,29 +190,45 @@ modelViewer.addEventListener('load', () => {
     };
 
     startSVGRenderLoop();
+
+    // ! Annotations
+
+    modelViewer.addEventListener('click', function (event) {
+        const hotspotCounter = Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+
+        const rect = modelViewer.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        const dataPosition = modelViewer.positionAndNormalFromPoint(x, y);
+
+        if (dataPosition == null) {
+            return;
+        }
+
+        const { position, normal } = dataPosition;
+
+        const mod = document.querySelector('#hotspotDiv')
+        const newEl = `<button
+                                            class="hotspot"
+                                            slot="hotspot-${hotspotCounter}"
+                                            data-position="${position?.x + ' ' + position?.y + ' ' + position?.z}"
+                                            data-normal="${normal?.x + ' ' + normal?.y + ' ' + normal?.z}"
+                                        ></button>`
+
+        const hotspot = document.createElement('button');
+        hotspot.slot = `hotspot-${hotspotCounter}`;
+        hotspot.classList.add('hotspot');
+        hotspot.dataset.position = position.toString();
+        if (normal != null) {
+            hotspot.dataset.normal = normal.toString();
+        }
+
+        mod.after(hotspot)
+    });
+
 });
 
-// ! Annotations
 
-// modelViewerTexture.addEventListener('click', function (event) {
-//     const hotspotCounter = Math.floor((1 + Math.random()) * 0x10000)
-//         .toString(16)
-//         .substring(1);
-//     const x = event.clientX;
-//     const y = event.clientY;
-
-//     const dataPosition = modelViewerTexture.positionAndNormalFromPoint(x, y);
-
-//     if (dataPosition == null) {
-//         return;
-//     }
-
-//     const { position, normal } = dataPosition;
-
-//     modelViewerTexture.innerHTML += `<button
-//                                         class="hotspot"
-//                                         slot="hotspot-${hotspotCounter}"
-//                                         data-position="${position?.x + ' ' + position?.y + ' ' + position?.z}"
-//                                         data-normal="${normal?.x + ' ' + normal?.y + ' ' + normal?.z}"
-//                                     ></button>`
-// });
