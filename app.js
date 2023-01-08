@@ -1,3 +1,4 @@
+console.log('ok')
 import { dynamicMaterials, materialGroup } from './data.js';
 
 const modelViewer = document.querySelector("model-viewer");
@@ -11,6 +12,7 @@ function setVisibility(element) {
         element.classList.add('hide');
     }
 }
+
 
 checkbox.addEventListener('change', () => {
     setVisibility(modelViewer.querySelector('#lines'));
